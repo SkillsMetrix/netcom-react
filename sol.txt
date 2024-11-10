@@ -1,4 +1,20 @@
 import React, { Component } from "react";
+
+export default class User extends Component {
+  render() {
+    return (
+      <div>
+       {this.props.ud}
+       <button onClick={(e)=>{this.props.deleteUser(this.props.ud)}}>Delete</button>
+      </div>
+    );
+  }
+}
+
+-----------
+
+
+import React, { Component } from "react";
 import  Header  from "./Header";
 import  Footer  from "./Footer";
 import Users from "./Users";
@@ -11,7 +27,11 @@ export class MainApp extends Component {
     }
 
     deleteONe=(data)=>{
-      alert('user deleted')
+     this.setState((prevState)=>{
+      return{
+        userData:prevState.userData.filter((option)=> data !== option)
+      }
+     })
     }
     deleteAll=()=>{
       this.setState(()=>{
@@ -41,38 +61,6 @@ export class MainApp extends Component {
         <Users udata={this.state.userData} da={this.deleteONe}/>
         <AddUser au={this.addUser}/>
         <Footer fdata={footerData}/>
-      </div>
-    );
-  }
-}
-
----------
-
-import React, { Component } from "react";
-import User from "./User";
-
-export default class Users extends Component {
-  render() {
-    return (
-      <div>
-       {this.props.udata.map((data)=>  <User ud={data} deleteUser={this.props.da}/>)}
-       
-      </div>
-    );
-  }
-}
-
-
-----------
-
-import React, { Component } from "react";
-
-export default class User extends Component {
-  render() {
-    return (
-      <div>
-       {this.props.ud}
-       <button onClick={this.props.deleteUser}>Delete</button>
       </div>
     );
   }
