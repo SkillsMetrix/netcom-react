@@ -10,6 +10,13 @@ export class MainApp extends Component {
       userData:[]     
     }
 
+    deleteAll=()=>{
+      this.setState(()=>{
+        return {
+          userData:[]
+        }
+      })
+    }
     //update the state
   addUser=(data)=>{
       this.setState((prevState)=>{
@@ -25,7 +32,7 @@ export class MainApp extends Component {
   
     return (
       <div>
-        <Header hdata={headerData}/>
+        <Header hdata={headerData}  da={this.deleteAll}/>
         <p> Welcome to MainApp Component</p>
         {/* render the state in step-2 */}
         <Users udata={this.state.userData}/>
@@ -35,24 +42,17 @@ export class MainApp extends Component {
     );
   }
 }
-------------
-
+---
 import React, { Component } from "react";
 
-export default class AddUser extends Component {
-  addUser=(e)=>{
-    e.preventDefault();
-    const udata=e.target.elements.uname.value
-    
-      this.props.au(udata)
-  }
+export default class Header extends Component {
   render() {
     return (
       <div>
-       <form onSubmit={this.addUser}>
-        UserName:<input type="text" name='uname'/>
-       <button >Add User</button>
-       </form>
+        <p> {this.props.hdata}</p>
+
+        <hr/>
+        <button onClick={this.props.da}>Delete All</button>
       </div>
     );
   }
