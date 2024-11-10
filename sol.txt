@@ -1,51 +1,19 @@
 import React, { Component } from "react";
-import  Header  from "./Header";
-import  Footer  from "./Footer";
-import Users from "./Users";
-import AddUser from "./AddUser";
 
-export class MainApp extends Component {
-  render() {
-
-    const headerData='Welcome to Header '
-    const footerData='Welcome to Footer '
-    const userData=['admin','manager','qa']
-    return (
-      <div>
-        <Header hdata={headerData}/>
-        <p> Welcome to MainApp Component</p>
-        <Users udata={userData}/>
-        <AddUser/>
-        <Footer fdata={footerData}/>
-      </div>
-    );
+export default class AddUser extends Component {
+  addUser=(e)=>{
+    e.preventDefault();
+    const udata=e.target.elements.uname.value
+    
+    alert(udata)
   }
-}
------------------
-
-import React, { Component } from "react";
-import User from "./User";
-
-export default class Users extends Component {
   render() {
     return (
       <div>
-       {this.props.udata.map((data)=>  <User ud={data}/>)}
-       
-      </div>
-    );
-  }
-}
-
------------
-
-import React, { Component } from "react";
-
-export default class User extends Component {
-  render() {
-    return (
-      <div>
-       {this.props.ud}
+       <form onSubmit={this.addUser}>
+        UserName:<input type="text" name='uname'/>
+       <button >Add User</button>
+       </form>
       </div>
     );
   }
