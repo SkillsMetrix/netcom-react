@@ -1,61 +1,52 @@
-
 import React, { Component } from "react";
 import  Header  from "./Header";
 import  Footer  from "./Footer";
+import Users from "./Users";
+import AddUser from "./AddUser";
 
 export class MainApp extends Component {
   render() {
+
+    const headerData='Welcome to Header '
+    const footerData='Welcome to Footer '
+    const userData=['admin','manager','qa']
     return (
       <div>
-        <Header/>
+        <Header hdata={headerData}/>
         <p> Welcome to MainApp Component</p>
-        <Footer/>
+        <Users udata={userData}/>
+        <AddUser/>
+        <Footer fdata={footerData}/>
       </div>
     );
   }
 }
-
-------------
+-----------------
 
 import React, { Component } from "react";
+import User from "./User";
 
-export default class Footer extends Component {
+export default class Users extends Component {
   render() {
     return (
       <div>
-        <p> Welcome to Footer Component</p>
+       {this.props.udata.map((data)=>  <User ud={data}/>)}
+       
       </div>
     );
   }
 }
 
-
-----------
+-----------
 
 import React, { Component } from "react";
 
-export default class Header extends Component {
+export default class User extends Component {
   render() {
     return (
       <div>
-        <p> Welcome to Header Component</p>
+       {this.props.ud}
       </div>
     );
   }
 }
----
-import logo from './logo.svg';
-import './App.css';
-import { MainApp } from './components/MainApp';
-
-function App() {
-  return (
-    <div className="App">
-     <p>Welcome to ReactJS Application</p>
-
-     <MainApp/>
-    </div>
-  );
-}
-
-export default App;
