@@ -10,6 +10,9 @@ export class MainApp extends Component {
       userData:[]     
     }
 
+    deleteONe=(data)=>{
+      alert('user deleted')
+    }
     deleteAll=()=>{
       this.setState(()=>{
         return {
@@ -35,24 +38,41 @@ export class MainApp extends Component {
         <Header hdata={headerData}  da={this.deleteAll}/>
         <p> Welcome to MainApp Component</p>
         {/* render the state in step-2 */}
-        <Users udata={this.state.userData}/>
+        <Users udata={this.state.userData} da={this.deleteONe}/>
         <AddUser au={this.addUser}/>
         <Footer fdata={footerData}/>
       </div>
     );
   }
 }
----
-import React, { Component } from "react";
 
-export default class Header extends Component {
+---------
+
+import React, { Component } from "react";
+import User from "./User";
+
+export default class Users extends Component {
   render() {
     return (
       <div>
-        <p> {this.props.hdata}</p>
+       {this.props.udata.map((data)=>  <User ud={data} deleteUser={this.props.da}/>)}
+       
+      </div>
+    );
+  }
+}
 
-        <hr/>
-        <button onClick={this.props.da}>Delete All</button>
+
+----------
+
+import React, { Component } from "react";
+
+export default class User extends Component {
+  render() {
+    return (
+      <div>
+       {this.props.ud}
+       <button onClick={this.props.deleteUser}>Delete</button>
       </div>
     );
   }
