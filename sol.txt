@@ -1,33 +1,55 @@
+import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-// functional component can also have 'state' and 'lifecycle' with using HOOKS
-export default function UsersApp() {
-  const [counter, setCounter] = useState(10);
-  // this will behave like componentDidMount
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import RestAppData from "./RestAppData";
+const URL = "https://jsonplaceholder.typicode.com/users";
+function RestApp(props) {
+  state = {
+    users: [],
+  };
+  //initialize the state with empty array of users
+  const [users, setUsers] = useState([]);
   useEffect(() => {
-    console.log("call only on load");
+    axios
+      .get(URL)
+      .then((response) => response.data)
+      .then((data) => {
+        setUsers(data);
+      });
   }, []);
-  // this will behave like componentDidupdate
-  useEffect(() => {
-    console.log("call only on state change");
-  }, [counter]);
-  // initialize the state
-
-  // updating the state
-  const increment = () => {
-    setCounter(counter + 1);
-  };
-  const decrement = () => {
-    setCounter(counter - 1);
-  };
-
   return (
     <View>
-      <Text>UsersApp Count Value: {counter}</Text>
-      <Button title="INC" onPress={() => setCounter(counter + 1)}></Button>
-      <Button title="DEC" onPress={decrement}></Button>
+      <RestAppData data={users} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+
+export default RestApp;
+--------
+
+
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+
+export default function RestAppData(props) {
+  return (
+    <View>
+      <Text>User Details</Text>
+        {props.data.map((user) => (
+          <Text>{user.name}</Text>
+        ))}
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({})
