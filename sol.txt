@@ -1,36 +1,24 @@
-import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
-import React, { Component } from "react";
-import axios from "axios";
-const URL = "https://jsonplaceholder.typicode.com/users";
-export default class RestApp extends Component {
-  state = {
-    users: [],
+import React, { useEffect, useState } from "react";
+
+export default function UsersApp() {
+  // initialize the state
+  const [counter, setCounter] = useState(10);
+  // updating the state
+  const increment = () => {
+    setCounter(counter + 1);
   };
-  componentDidMount() {
-    axios
-      .get(URL)
-      .then((response) => response.data)
-      .then((data) => {
-        this.setState({ users: data });
-      });
-  }
-  render() {
-    return (
-      <View>
-        <Text>User Details</Text>
-        {this.state.users.map((user) => (
-          <Text>{user.name}</Text>
-        ))}
-      </View>
-    );
-  }
+  const decrement = () => {
+    setCounter(counter - 1);
+  };
+
+  return (
+    <View>
+      <Text>UsersApp Count Value: {counter}</Text>
+      <Button title="INC" onPress={increment}></Button>
+      <Button title="DEC" onPress={decrement}></Button>
+    </View>
+  );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+
+const styles = StyleSheet.create({});
