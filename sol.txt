@@ -1,26 +1,26 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import RestAppData from "./RestAppData";
-const URL = "https://jsonplaceholder.typicode.com/users";
-function RestApp(props) {
-  state = {
-    users: [],
-  };
-  //initialize the state with empty array of users
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    axios
-      .get(URL)
-      .then((response) => response.data)
-      .then((data) => {
-        setUsers(data);
-      });
-  }, []);
+import { StatusBar } from 'expo-status-bar';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import MainApp from './components/MainApp';
+import UsersApp from './components/UsersApp';
+import RestApp from './components/RestApp';
+import {useState} from 'react'
+import { MyContext } from './contextapp/MyContext';
+import MainComp from './contextapp/MainComp';
+
+export default function App() {
+
+   const userData=[{name:'admin',email:'admin@mail.com'}]
+
+    const [user,setUser]=useState(userData)
+
   return (
-    <View>
-      <RestAppData data={users} />
+    <View style={styles.container}>
+     
+     <MyContext.Provider value={user}>
+      <MainComp/>
+     </MyContext.Provider>
+     
+      <StatusBar style="auto" />
     </View>
   );
 }
@@ -28,26 +28,64 @@ function RestApp(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
-
-export default RestApp;
---------
-
+---
 
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import MyComponent from './MyComponent'
 
-export default function RestAppData(props) {
+export default function MainComp() {
   return (
     <View>
-      <Text>User Details</Text>
-        {props.data.map((user) => (
-          <Text>{user.name}</Text>
-        ))}
+      <MyComponent/>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({})
+
+
+----------
+
+import { StyleSheet, Text, View } from 'react-native'
+import React,{useContext} from 'react'
+import {MyContext} from './MyContext'
+import Welcome from './Welcome'
+ 
+
+export default function MyComponent() {
+   return (
+    <View>
+     
+
+      <Welcome/>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({})
+
+
+-----
+
+import { StyleSheet, Text, View } from 'react-native'
+import React,{useContext} from 'react'
+import {MyContext} from './MyContext'
+ 
+
+export default function Welcome() {
+  const myContext= useContext(MyContext)
+  return (
+    <View>
+      <Text>Welcome Data</Text>
+      {myContext.map((data)=> (
+        <Text>{data.name}--- {data.email}</Text>
+      ))}
     </View>
   )
 }
