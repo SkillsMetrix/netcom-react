@@ -1,30 +1,33 @@
 import React, { Component } from "react";
-
-export default class User extends Component {
-  render() {
-    return (
-      <div>
-       {this.props.ud}
-       <button onClick={(e)=>{this.props.deleteUser(this.props.ud)}}>Delete</button>
-      </div>
-    );
-  }
-}
-
------------
-
-
-import React, { Component } from "react";
 import  Header  from "./Header";
 import  Footer  from "./Footer";
 import Users from "./Users";
 import AddUser from "./AddUser";
 
 export class MainApp extends Component {
-// initialize the state
-    state={
-      userData:[]     
+
+  // initialize the state
+  state={
+    userData:[]     
+  }
+
+// lifecycle methods
+  componentDidMount(){
+    const json= localStorage.getItem('mydata')
+    const userData=JSON.parse(json)
+    if(userData){
+      this.setState(()=>{
+        return{
+          userData
+        }
+      })
     }
+  }
+
+  componentDidUpdate(){
+    const json= JSON.stringify(this.state.userData)
+    localStorage.setItem('mydata',json)
+  }
 
     deleteONe=(data)=>{
      this.setState((prevState)=>{
@@ -55,7 +58,9 @@ export class MainApp extends Component {
   
     return (
       <div>
-        <Header hdata={headerData}  da={this.deleteAll}/>
+        <Header hdata={headerData}  da={this.deleteAll}
+        hasData={this.state.userData.length > 0}
+        />
         <p> Welcome to MainApp Component</p>
         {/* render the state in step-2 */}
         <Users udata={this.state.userData} da={this.deleteONe}/>
