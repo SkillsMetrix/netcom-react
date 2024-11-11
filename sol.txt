@@ -1,72 +1,36 @@
+import { StatusBar } from "expo-status-bar";
+import { Button, StyleSheet, Text, View } from "react-native";
 import React, { Component } from "react";
-import  Header  from "./Header";
-import  Footer  from "./Footer";
-import Users from "./Users";
-import AddUser from "./AddUser";
-
-export class MainApp extends Component {
-
-  // initialize the state
-  state={
-    userData:[]     
+import axios from "axios";
+const URL = "https://jsonplaceholder.typicode.com/users";
+export default class RestApp extends Component {
+  state = {
+    users: [],
+  };
+  componentDidMount() {
+    axios
+      .get(URL)
+      .then((response) => response.data)
+      .then((data) => {
+        this.setState({ users: data });
+      });
   }
-
-// lifecycle methods
-  componentDidMount(){
-    const json= localStorage.getItem('mydata')
-    const userData=JSON.parse(json)
-    if(userData){
-      this.setState(()=>{
-        return{
-          userData
-        }
-      })
-    }
-  }
-
-  componentDidUpdate(){
-    const json= JSON.stringify(this.state.userData)
-    localStorage.setItem('mydata',json)
-  }
-
-    deleteONe=(data)=>{
-     this.setState((prevState)=>{
-      return{
-        userData:prevState.userData.filter((option)=> data !== option)
-      }
-     })
-    }
-    deleteAll=()=>{
-      this.setState(()=>{
-        return {
-          userData:[]
-        }
-      })
-    }
-    //update the state
-  addUser=(data)=>{
-      this.setState((prevState)=>{
-        return {
-          userData:prevState.userData.concat(data)
-        }
-      }) 
-  }  
   render() {
-
-    const headerData='Welcome to Header '
-    const footerData='Welcome to Footer '
-  
     return (
-      <div>
-        <Header hdata={headerData}  da={this.deleteAll}
-        hasData={this.state.userData.length > 0}
-        />
-        <p> Welcome to MainApp Component</p>
-        {/* render the state in step-2 */}
-        <Users udata={this.state.userData} da={this.deleteONe}/>
-        <AddUser au={this.addUser}/>
-        <Footer fdata={footerData}/>
-      </div>
+      <View>
+        <Text>User Details</Text>
+        {this.state.users.map((user) => (
+          <Text>{user.name}</Text>
+        ))}
+      </View>
     );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
