@@ -1,53 +1,32 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import React, { useState, useEffect } from "react";
-import Weather from "./components/Weather";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
+import { haze, rainy, snow, clear } from "../assets/background/index";
+import React, { useEffect, useState } from "react";
 
-const API_KEY = "b3aaa0b3323c0baab93aff38f75b44cb";
-
-export default function App() {
-  const [weatherData, setWeatherData] = useState(null);
-  const [loaded, setLoaded] = useState(true);
-  async function fetchWeatherData(cityNAme) {
-    setLoaded(false);
-    const API = `https://api.openweathermap.org/data/2.5/weather?q=${cityNAme}&appid=${API_KEY}&units=metric`;
-    try {
-      const response = await fetch(API);
-      if (response.status == 200) {
-        const data = await response.json();
-        console.log(data);
-        setWeatherData(data);
-      } else {
-        setWeatherData(null);
-      }
-      // setLoaded(true)
-    } catch (error) {}
-  }
+export default function Weather({ weatherData }) {
+  const { weather } = weatherData;
+  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [{ main }] = weather;
   useEffect(() => {
-    fetchWeatherData("mumbai");
-  }, []);
-  if (!loaded) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator color="blue" size={36} />
-      </View>
-    );
-  } else if (weatherData === null) {
-    <View></View>;
-  }
+    console.log(main);
+    setBackgroundImage(getImage(main));
+  }, [weatherData]);
+  function getImage(weather) {
+    if (weather === "Snow") return snow;
+    if (weather === "Clear") return clear;
+    if (weather === "Rain") return rainy;
+    if (weather === "Haze") return haze;
 
+    return rainy;
+  }
   return (
-    <View style={styles.container}>
-      <Weather weatherData={weatherData} />
+    <View>
+      <ImageBackground
+        source={backgroundImage}
+        style={styles.bgi}
+        resizeMode="cover"
+      ></ImageBackground>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});
