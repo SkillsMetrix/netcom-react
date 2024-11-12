@@ -7,12 +7,15 @@ import {
 } from "react-native";
 import { haze, rainy, snow, sunny } from "../assets/background/index";
 import React, { useEffect, useState } from "react";
+import SearchBar from "./SearchBar";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export default function Weather({ weatherData }) {
   const {
     weather,
     name,
     main: { temp, humidity },
+    wind:{speed}
   } = weatherData;
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [{ main }] = weather;
@@ -35,8 +38,22 @@ export default function Weather({ weatherData }) {
         style={styles.bgi}
         resizeMode="cover"
       >
+        <SearchBar/>
         <View style={{ alignItems: "center" }}>
-          <Text style={{ ...styles.headerText }}>{name}</Text>
+          <Text style={{ ...styles.headerText,fontWeight:'bold' }}>{name}</Text>
+          <Text style={{ ...styles.headerText,fontWeight:'bold' }}>{main}</Text>
+          <Text style={{ ...styles.headerText }}>{temp}</Text>
+        </View>
+        <View style={styles.info}>
+        <Text style={{ fontSize:22 }}>Humidity</Text>
+        <Text style={{ fontSize:22 }}>{humidity}%</Text>
+
+        </View>
+
+        <View style={styles.info}>
+        <Text style={{ fontSize:22 }}>Wind Speed</Text>
+        <Text style={{ fontSize:22 }}>{speed}m/s</Text>
+
         </View>
       </ImageBackground>
     </View>
@@ -56,5 +73,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 36,
     marginTop: 10,
+    
   },
 });
