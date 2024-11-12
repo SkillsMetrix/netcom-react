@@ -1,48 +1,61 @@
-import { StyleSheet, Text, View, ScrollView, FlatList } from "react-native";
-import React from "react";
-import { persons } from "../model/persons.js";
+import { FlatList, StyleSheet, Text, View, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+const URL = "https://randomuser.me/api?page=3&results=10";
+export default function InfiniteScroll() {
+  const [users, setUsers] = useState([]);
 
-export default function FlatListApp() {
-  // show the seprator
-  const myItemSeprator = () => {
-    return (
-      <View
-        style={{ height: 1, backgroundColor: "gray", marginHorizontal: 10 }}
-      />
-    );
+  const loadUsers = () => {
+    axios.get(URL).then((res) => {
+      setUsers(res.data.results);
+    });
   };
-  // show if no data found
-  const myListEmpty = () => {
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const renderItem = ({ item }) => {
     return (
-      <View style={{ alignItems: "center" }}>
-        <Text style={styles.item}>No Users Found</Text>
+      <View style={styles.itemWrapperStyle}>
+        <Image style={styles.ItemImage} source={{ uri: item.picture.large }} />
+        <View style={styles.contentWrapper}>
+          <Text
+            style={styles.txtName}
+          >{`${item.name.title} ${item.name.first} ${item.name.last}`}</Text>
+          <Text style={styles.txtEmail}>{item.email}</Text>
+        </View>
       </View>
     );
   };
-
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={persons}
-        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={myItemSeprator}
-        ListEmptyComponent={myListEmpty}
-        ListHeaderComponent={() => <Text>FlatListApp</Text>}
-        ListFooterComponent={() => <Text>Thats all</Text>}
-      />
-    </View>
+    <FlatList
+      data={users}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.email}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 50,
+  itemWrapperStyle: {
+    flexDirection: "row",
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
   },
-  item: {
-    padding: 20,
-    fontSize: 15,
-    marginTop: 5,
+  ItemImage: {
+    width: 50,
+    height: 50,
+    marginRight: 16,
+  },
+  contentWrapper: {
+    justifyContent: "space-around",
+  },
+  txtName: {
+    fontSize: 16,
+  },
+  txtEmail: {
+    color: "pink",
   },
 });
