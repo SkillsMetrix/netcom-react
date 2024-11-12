@@ -1,26 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
-import MainApp from './components/MainApp';
-import UsersApp from './components/UsersApp';
-import RestApp from './components/RestApp';
-import {useState} from 'react'
-import { MyContext } from './contextapp/MyContext';
-import MainComp from './contextapp/MainComp';
+import { Button, StyleSheet, Text, View } from "react-native";
+import React from "react";
 
-export default function App() {
-
-   const userData=[{name:'admin',email:'admin@mail.com'}]
-
-    const [user,setUser]=useState(userData)
-
+export default function ButtonApp() {
   return (
-    <View style={styles.container}>
-     
-     <MyContext.Provider value={user}>
-      <MainComp/>
-     </MyContext.Provider>
-     
-      <StatusBar style="auto" />
+    <View style="styles.container">
+      <View style="styles.buttonContainer">
+        <Button title="Btn-1"></Button>
+      </View>
+      <View style="styles.buttonContainer">
+        <Button title="Btn-2" color="red"></Button>
+      </View>
+      <View style="styles.multiButtonContainer">
+        <Button title="Btn-disabled" disabled={true}></Button>
+        <Button title="Btn-4 submit" color="pink"></Button>
+      </View>
     </View>
   );
 }
@@ -28,66 +21,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    margin: 20,
+  },
+  multiButtonContainer: {
+    margin: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
----
-
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import MyComponent from './MyComponent'
-
-export default function MainComp() {
-  return (
-    <View>
-      <MyComponent/>
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({})
-
-
-----------
-
-import { StyleSheet, Text, View } from 'react-native'
-import React,{useContext} from 'react'
-import {MyContext} from './MyContext'
-import Welcome from './Welcome'
- 
-
-export default function MyComponent() {
-   return (
-    <View>
-     
-
-      <Welcome/>
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({})
-
-
------
-
-import { StyleSheet, Text, View } from 'react-native'
-import React,{useContext} from 'react'
-import {MyContext} from './MyContext'
- 
-
-export default function Welcome() {
-  const myContext= useContext(MyContext)
-  return (
-    <View>
-      <Text>Welcome Data</Text>
-      {myContext.map((data)=> (
-        <Text>{data.name}--- {data.email}</Text>
-      ))}
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({})
