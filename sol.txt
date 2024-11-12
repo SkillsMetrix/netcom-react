@@ -1,26 +1,37 @@
-import { StyleSheet, Text, View,ScrollView,FlatList} from "react-native";
+import { StyleSheet, Text, View, ScrollView, FlatList } from "react-native";
 import React from "react";
-import {persons} from '../model/persons.js'
-
+import { persons } from "../model/persons.js";
 
 export default function FlatListApp() {
-    
-    const myItemSeprator=()=>{
-        return (
-            <View style={{height:1,backgroundColor:'gray',marginHorizontal:10}}
+  // show the seprator
+  const myItemSeprator = () => {
+    return (
+      <View
+        style={{ height: 1, backgroundColor: "gray", marginHorizontal: 10 }}
+      />
+    );
+  };
+  // show if no data found
+  const myListEmpty = () => {
+    return (
+      <View style={{ alignItems: "center" }}>
+        <Text style={styles.item}>No Users Found</Text>
+      </View>
+    );
+  };
 
-            />
-        )
-    }
   return (
     <View style={styles.container}>
-     <Text>FlatListApp</Text>
-        <FlatList
+      <FlatList
         data={persons}
-        renderItem={({item})=> <Text style={styles.item}>{item.name}</Text>}
-        keyExtractor={(item)=> item.id}/>
-        ItemSepratorComponent={myItemSeprator}
-       </View>
+        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={myItemSeprator}
+        ListEmptyComponent={myListEmpty}
+        ListHeaderComponent={() => <Text>FlatListApp</Text>}
+        ListFooterComponent={() => <Text>Thats all</Text>}
+      />
+    </View>
   );
 }
 
