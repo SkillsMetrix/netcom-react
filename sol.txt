@@ -1,96 +1,41 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ActivityIndicator,
-  StatusBar,
-} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
-export default function InfiniteScroll() {
-  const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+const API_KEY = "b3aaa0b3323c0baab93aff38f75b44cb";
 
-  const loadUsers = () => {
-    setIsLoading(true);
-    axios
-      .get(`https://randomuser.me/api?page=${currentPage}&results=10`)
-      .then((res) => {
-        setUsers([...users, ...res.data.results]);
-        setIsLoading(false);
-      });
-  };
-  // component didupdate
+export default function App() {
+  const [weatherData, setWeatherData] = useState(null);
+  const [loaded, setLoaded] = useState(true);
+  async function fetchWeatherData() {
+    const API = `https://api.openweathermap.org/data/2.5/weather?q=riyadh&appid=${API_KEY}&units=metric`;
+    try {
+      const response = await fetch(API);
+      if (response.status == 200) {
+        const data = await response.json();
+        console.log(data);
+        setWeatherData(data);
+      } else {
+        setWeatherData(null);
+      }
+    } catch (error) {}
+  }
   useEffect(() => {
-    loadUsers();
-  }, [currentPage]);
-
-  const renderLoader = () => {
-    return (
-      <View style={styles.loaderStyle}>
-        <ActivityIndicator size="large" color="blue" />
-      </View>
-    );
-  };
-  const loadMoreItem = () => {
-    setCurrentPage(currentPage + 1);
-  };
-  const renderItem = ({ item }) => {
-    return (
-      <View style={styles.itemWrapperStyle}>
-        <Image style={styles.ItemImage} source={{ uri: item.picture.large }} />
-        <View style={styles.contentWrapper}>
-          <Text
-            style={styles.txtName}
-          >{`${item.name.title} ${item.name.first} ${item.name.last}`}</Text>
-          <Text style={styles.txtEmail}>{item.email}</Text>
-        </View>
-      </View>
-    );
-  };
+    fetchWeatherData();
+  }, []);
   return (
-    <>
-      <StatusBar backgroundColor="#000" />
-      <FlatList
-        data={users}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.email}
-        ListFooterComponent={renderLoader}
-        onEndReached={loadMoreItem}
-        onEndReachedThreshold={0}
-      />
-    </>
+    <View style={styles.container}>
+      <Text>Open up App.js to start working on your app!</Text>
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  itemWrapperStyle: {
-    flexDirection: "row",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderColor: "#ddd",
-  },
-  ItemImage: {
-    width: 50,
-    height: 50,
-    marginRight: 16,
-  },
-  contentWrapper: {
-    justifyContent: "space-around",
-  },
-  txtName: {
-    fontSize: 16,
-  },
-  txtEmail: {
-    color: "pink",
-  },
-  loaderStyle: {
-    marginVertical: 16,
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
     alignItems: "center",
+    justifyContent: "center",
   },
 });
