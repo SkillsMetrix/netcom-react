@@ -1,27 +1,43 @@
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+const persons = [
+  {
+    id: "101",
+    name: "Amar",
+  },
+  {
+    id: "102",
+    name: "sushma",
+  },
+  {
+    id: "103",
+    name: "Mac",
+  },
+];
 
-
-
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
-
-export default function TextApp() {
+export default function FlatListApp() {
   return (
-    <View>
-       <Text>Enter Username</Text> 
-      <TextInput placeholder="Enter Username"/>
+    <View style={styles.container}>
+      <Text>FlatListApp</Text>
+      {persons.map((person) => {
+        return (
+          <View>
+            <Text style={styles.item}>{person.name}</Text>
+          </View>
+        );
+      })}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'pink',
-        alignItems:'center'
-    },
-    title:{
-        fontSize:40,
-        marginBottom:20,
-        fontWeight:'bold'
-    }
-})
+  container: {
+    flex: 1,
+    padding: 50,
+  },
+  item: {
+    padding: 20,
+    fontSize: 15,
+    marginTop: 5,
+  },
+});
