@@ -1,52 +1,27 @@
-import { Button, StyleSheet, Text, View,SafeAreaView, TouchableOpacity, Image } from "react-native";
-import React from "react";
 
-export default function Touchablepp() {
+
+
+import { StyleSheet, Text, TextInput, View } from 'react-native'
+import React from 'react'
+
+export default function TextApp() {
   return (
-    <SafeAreaView style="styles.container">
-       <Button title="Btn-2" color="red"></Button>
-    <TouchableOpacity 
-    style={[styles.button, {backgroundColor:'#ee2244'}]}>
-        <Text>Red Button</Text>
-    </TouchableOpacity>
-
-
-    <TouchableOpacity 
-    style={[styles.button, {backgroundColor:'#2277ee'}]}>
-        <Text>Blue Button</Text>
-    </TouchableOpacity>
-
-
-    <TouchableOpacity 
-    style={[styles.button, {backgroundColor:'#2277ee'}]} >
-       <Image style={
-        styles.tinylogo}
-        source={{uri:'https://reactnative.dev/img/tiny_logo.png'}}/>
-        <Text>Image Button</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity 
-    style={[styles.button, {backgroundColor:'#22bb22'}]} activeOpacity={0.1} disabled={true}>
-        <Text>Green Button</Text>
-    </TouchableOpacity>
-    
-    </SafeAreaView>
-  );
+    <View>
+       <Text>Enter Username</Text> 
+      <TextInput placeholder="Enter Username"/>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    marginHorizontal: 36
-  },
-  
-  button:{
-    marginBottom:12,
-    padding:12
-  },
-  tinylogo:{
-    width:50,
-    height:50
-  }
-});
+    container:{
+        flex:1,
+        backgroundColor:'pink',
+        alignItems:'center'
+    },
+    title:{
+        fontSize:40,
+        marginBottom:20,
+        fontWeight:'bold'
+    }
+})
