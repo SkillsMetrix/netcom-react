@@ -1,10 +1,39 @@
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import CategoriesScreen from "./screens/CategoriesScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import MealsOverviewScreen from "./screens/MealsOverviewScreen";
+const Stack = createStackNavigator();
+export default function App() {
+  return (
+    <>
+      <StatusBar style="light" />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="MealsCategories" component={CategoriesScreen} />
+          <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {},
+});
+-------
+
 import { Pressable, StyleSheet, Text, View,Platform } from "react-native";
 import React from "react";
 
-export default function CategoryGridTitle({ title, color }) {
+export default function CategoryGridTitle({ title, color ,onPress}) {
   return (
     <View style={styles.gridItem }>
-      <Pressable style={styles.button} android_ripple={{color:'#ccc'}}>
+      <Pressable style={styles.button} android_ripple={{color:'#ccc'}}
+      onPress={onPress}
+      
+      >
         <View style={[styles.innerContainer ,{backgroundColor:color}]}>
           <Text style={styles.title}>{title}</Text>
         </View>
@@ -42,3 +71,59 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+
+
+----------
+
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+
+export default function MealsOverviewScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>MealsOverviewScreen</Text>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        padding:16
+    }
+})
+
+------------
+
+import { FlatList } from "react-native";
+import { CATEGORIES } from "../data/dummy-data";
+import CategoryGridTitle from "../components/CategoryGridTitle";
+
+
+function CategoriesScreen({navigation}) {
+
+  function renderCategoryItem(itemData) {
+    function pressHandler(){
+      navigation.navigate("MealsOverview")
+    }
+  
+    
+    return (
+      <CategoryGridTitle
+        title={itemData.item.title}
+        color={itemData.item.color}
+        onPress={pressHandler}
+      />
+    );
+  }
+  
+  return (
+    <FlatList
+      data={CATEGORIES}
+      keyExtractor={(item) => item.id}
+      renderItem={renderCategoryItem}
+      numColumns={2}
+    />
+  );
+}
+export default CategoriesScreen;
