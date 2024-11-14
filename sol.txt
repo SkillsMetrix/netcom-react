@@ -1,3 +1,22 @@
+
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+
+import { Ionicons } from '@expo/vector-icons'
+
+export default function IconButton({onPress}) {
+  return (
+  <Pressable onPress={onPress}>
+     <Ionicons name='star' size={24} color="purple"/>
+  </Pressable>
+  )
+}
+
+const styles = StyleSheet.create({})
+
+
+---------
+
 import {
   Button,
   Image,
@@ -11,6 +30,7 @@ import { MEALS } from "../data/dummy-data";
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MealDetail/Subtitle";
 import List from "../components/MealDetail/List";
+import IconButton from "../components/IconButton";
 
 export default function MealDetailsScreen({ route, navigation }) {
   const mealId = route.params.mealId;
@@ -22,7 +42,7 @@ export default function MealDetailsScreen({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <Button title="Fav" onPress={headerPressed}></Button>;
+        return <IconButton onPress={headerPressed} />;
       },
     });
   }, [navigation, headerPressed]);
