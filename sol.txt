@@ -1,25 +1,68 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useLayoutEffect } from "react";
+import { MEALS } from "../data/dummy-data";
+import MealDetails from "../components/MealDetails";
+import Subtitle from "../components/MealDetail/Subtitle";
+import List from "../components/MealDetail/List";
 
-export default function List({ data }) {
-  return data.map((dataPoint) => (
-    <View key={dataPoint} style={styles.listItem}>
-      <Text style={styles.itemText}>{dataPoint}</Text>
-    </View>
-  ));
+export default function MealDetailsScreen({ route, navigation }) {
+  const mealId = route.params.mealId;
+  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+  function headerPressed() {
+    console.log("header pressed...!");
+  }
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return <Button title="Fav" onPress={headerPressed}></Button>;
+      },
+    });
+  }, [navigation, headerPressed]);
+  return (
+    <ScrollView style={styles.rootContainer}>
+      <View>
+        <Image style={styles.image} source={{ uri: selectedMeal.imageUrl }} />
+        <Text style={styles.title}> :{selectedMeal.title}</Text>
+        <MealDetails
+          duration={selectedMeal.duration}
+          complexity={selectedMeal.complexity}
+          affordability={selectedMeal.affordability}
+          textStyle={styles.detailText}
+        />
+        <Subtitle>Ingredient</Subtitle>
+        <List data={selectedMeal.ingredients} />
+
+        <Subtitle>Steps</Subtitle>
+        <List data={selectedMeal.steps} />
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
-  listItem: {
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginVertical: 4,
-    marginHorizontal: 12,
-    backgroundColor: "#e2b497",
+  rootContainer: {
+    marginBottom: 32,
   },
-  itemText: {
-    color: "blue",
+  image: {
+    width: "100%",
+    height: 350,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 24,
+    margin: 8,
     textAlign: "center",
+    color: "blue",
+  },
+  detailText: {
+    color: "red",
   },
 });
