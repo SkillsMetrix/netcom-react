@@ -1,70 +1,67 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import CategoriesScreen from "./screens/CategoriesScreen";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import MealsOverviewScreen from "./screens/MealsOverviewScreen";
-import MealDetailsScreen from "./screens/MealDetailsScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import FavoriteScreen from "./screens/FavoriteScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import WelcomeScreen from "./screens/WelcomeScreen";
+import UserScreen from "./screens/UserScreen";
 import { Ionicons } from "@expo/vector-icons";
-const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
-function DrawerNavigator() {
-  return (
-    <Drawer.Navigator>
-      <Drawer.Screen
-        name="Categories"
-        component={CategoriesScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Ionicons name="list" color={color} size={size} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Favorite"
-        component={FavoriteScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Ionicons name="star" color={color} size={size} />
-          ),
-        }}
-      />
-    </Drawer.Navigator>
-  );
-}
+const Drawer = createDrawerNavigator();
+const BottomTab = createBottomTabNavigator();
 export default function App() {
   return (
-    <>
-      <StatusBar style="light" />
+    <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator
+        <BottomTab.Navigator
+          initialRouteName="user"
           screenOptions={{
-            headerStyle: { backgroundColor: "pink" },
-            contentStyle: { backgroundColor: "black" },
+            headerStyle: { backgroundColor: "purple" },
+            headerTintColor: "white",
           }}
         >
-          <Stack.Screen
-            name="Drawer"
-            component={DrawerNavigator}
+          <BottomTab.Screen
+            name="welcome"
+            component={WelcomeScreen}
             options={{
-              headerShown: false,
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="home" color={color} size={size} />
+              ),
             }}
           />
-          <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
-          <Stack.Screen
-            name="MealDetails"
-            component={MealDetailsScreen}
-            options={{ title: "About the Meal" }}
+          <BottomTab.Screen
+            name="user"
+            component={UserScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="person" color={color} size={size} />
+              ),
+            }}
           />
-        </Stack.Navigator>
+        </BottomTab.Navigator>
       </NavigationContainer>
-    </>
+    </Provider>
+  );
+}
+----
+
+import { StyleSheet, Text, View, Button } from "react-native";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { increment } from "../redux/features/counterSlice";
+export default function UserScreen({ navigation }) {
+  const data = useSelector((state) => state.counter.counter);
+
+  const dispatch = useDispatch();
+
+  return (
+    <View>
+      <Text>Count: {data}</Text>
+      <Button title="INC" onPress={() => dispatch(increment())}></Button>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {},
-});
+const styles = StyleSheet.create({});
