@@ -1,56 +1,47 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, Button, View } from "react-native";
-import * as Battery from "expo-battery";
-import { useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import * as Location from "expo-location";
 
-export default function BatteryApp() {
-  const [isAvailable, setIsAvailable] = useState(false);
-  const [batteryInfo, setBatteryInfo] = useState(undefined);
+const LocationApp = () => {
+  const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
+    "Location Loading...."
+  );
+};
+const [locationServiceEnabled, setLocationServiceEnabled] = useState(false);
 
-  useEffect(() => {
-    async function checkAvailability() {
-      const isBatteryAvailable = await Battery.isAvailableAsync();
-      setIsAvailable(isBatteryAvailable);
-    }
-    checkAvailability();
-  }, []);
+useEffect(() => {
+    checkIfLocationEnabled()
+}, []);
 
-  const showBatteryInfo = () => {
-    console.log(batteryInfo);
-
-    return (
-      <View>
-        <Text>Low Power Mode: {batteryInfo.lowPowerMode ? "Yes" : "No"}</Text>
-        <Text>Battery Level: {batteryInfo.batteryLevel * 100}%</Text>
-        <Text>Battery State: {batteryInfo.batteryState}</Text>
-      </View>
+//check if location is enabled or not
+const checkIfLocationEnabled = async () => {
+  let enabled = await Location.hasServicesEnabledAsync(); // returns true or false
+  if (!enabled) {
+    Alert.alert(
+      "Location not enabled, please enable the location in ur device",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => console.log("Ok Pressed"),
+          style: "cancel",
+        },
+      ]
     );
-  };
-
-  const loadBatteryInfo = async () => {
-    let batteryInfoLoaded = await Battery.getPowerStateAsync();
-    setBatteryInfo(batteryInfoLoaded);
-  };
-
+  } else {
+    setLocationServiceEnabled(enabled); //store true into the state
+  }
+};
+export default function GeoApp() {
   return (
-    <View style={styles.container}>
-      <Text>
-        {isAvailable ? "Battery Details: " : "Battery info unavailable"}
-      </Text>
-      {batteryInfo ? showBatteryInfo() : <Text>Battery info not loaded</Text>}
-      {isAvailable && (
-        <Button title="Load Battery Info" onPress={loadBatteryInfo} />
-      )}
-      <StatusBar style="auto" />
+    <View>
+      <Text>GeoApp</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});
