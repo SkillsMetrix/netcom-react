@@ -1,67 +1,30 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
-import WelcomeScreen from "./screens/WelcomeScreen";
-import UserScreen from "./screens/UserScreen";
-import { Ionicons } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Provider } from "react-redux";
-import store from "./redux/store";
+import { StyleSheet, Text, View } from 'react-native'
+import * as Battery from 'expo-battery'
+import React, { useEffect, useState } from 'react'
 
-const Drawer = createDrawerNavigator();
-const BottomTab = createBottomTabNavigator();
-export default function App() {
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <BottomTab.Navigator
-          initialRouteName="user"
-          screenOptions={{
-            headerStyle: { backgroundColor: "purple" },
-            headerTintColor: "white",
-          }}
-        >
-          <BottomTab.Screen
-            name="welcome"
-            component={WelcomeScreen}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="home" color={color} size={size} />
-              ),
-            }}
-          />
-          <BottomTab.Screen
-            name="user"
-            component={UserScreen}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="person" color={color} size={size} />
-              ),
-            }}
-          />
-        </BottomTab.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
-}
-----
+export default function BatteryApp() {
+    const [isAvailable,setIsAvailable]= useState(false)
+    const [batteryInfo,setBatteryInfo]=useState(undefined)
 
-import { StyleSheet, Text, View, Button } from "react-native";
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { increment } from "../redux/features/counterSlice";
-export default function UserScreen({ navigation }) {
-  const data = useSelector((state) => state.counter.counter);
+    useEffect(()=>{
+        async function checkAvalability(){
+            const isBatteryAvbl= await Battery.isAvailableAsync()
+            setIsAvailable(isBatteryAvbl)
+        }
+        checkAvalability()
+    })
 
-  const dispatch = useDispatch();
-
+    const shoBatteryInfo=()=>{
+        console.log(batteryInfo);
+        
+    }
   return (
     <View>
-      <Text>Count: {data}</Text>
-      <Button title="INC" onPress={() => dispatch(increment())}></Button>
+      <Text>BatteryApp</Text>
+       
+      <Text>Low Power Mode: {batteryInfo.batteryLevel *100}%</Text>
     </View>
-  );
+  )
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
