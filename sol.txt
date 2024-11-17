@@ -56,13 +56,13 @@ export default function ContactsApp() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView>
         {getContactRows()}
       </ScrollView>
       <Text>{error}</Text>
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </View>
   );
 }
 
